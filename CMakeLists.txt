@@ -59,6 +59,7 @@ add_library(enet STATIC
     ${INCLUDE_FILES}
     ${SOURCE_FILES}
 )
+add_library(${PROJECT_NAME}::enet ALIAS enet)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
