@@ -55,12 +55,6 @@ if(HAS_SOCKLEN_T)
     add_definitions(-DHAS_SOCKLEN_T=1)
 endif()
 
-add_library(enet STATIC
-    ${INCLUDE_FILES}
-    ${SOURCE_FILES}
-)
-add_library(${PROJECT_NAME}::enet ALIAS enet)
-
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(INCLUDE_FILES_PREFIX include/enet)
@@ -87,6 +81,11 @@ set(SOURCE_FILES
     unix.c
     win32.c)
 
+add_library(enet STATIC
+    ${INCLUDE_FILES}
+    ${SOURCE_FILES}
+)
+add_library(${PROJECT_NAME}::enet ALIAS enet)
 source_group(include FILES ${INCLUDE_FILES})
 source_group(source FILES ${SOURCE_FILES})
 
