@@ -55,8 +55,6 @@ if(HAS_SOCKLEN_T)
     add_definitions(-DHAS_SOCKLEN_T=1)
 endif()
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
-
 set(INCLUDE_FILES_PREFIX include/enet)
 set(INCLUDE_FILES
     ${INCLUDE_FILES_PREFIX}/callbacks.h
@@ -86,6 +84,10 @@ add_library(enet STATIC
     ${SOURCE_FILES}
 )
 add_library(${PROJECT_NAME}::enet ALIAS enet)
+
+target_include_directories(enet PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_sources(enet PRIVATE ${SOURCE_FILES})
+
 source_group(include FILES ${INCLUDE_FILES})
 source_group(source FILES ${SOURCE_FILES})
 
