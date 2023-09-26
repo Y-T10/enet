@@ -55,8 +55,6 @@ if(HAS_SOCKLEN_T)
     add_definitions(-DHAS_SOCKLEN_T=1)
 endif()
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
-
 set(INCLUDE_FILES_PREFIX include/enet)
 set(INCLUDE_FILES
     ${INCLUDE_FILES_PREFIX}/callbacks.h
@@ -81,13 +79,17 @@ set(SOURCE_FILES
     unix.c
     win32.c)
 
-source_group(include FILES ${INCLUDE_FILES})
-source_group(source FILES ${SOURCE_FILES})
-
 add_library(enet STATIC
     ${INCLUDE_FILES}
     ${SOURCE_FILES}
 )
+add_library(${PROJECT_NAME}::enet ALIAS enet)
+
+target_include_directories(enet PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_sources(enet PRIVATE ${SOURCE_FILES})
+
+source_group(include FILES ${INCLUDE_FILES})
+source_group(source FILES ${SOURCE_FILES})
 
 if (MINGW)
     target_link_libraries(enet winmm ws2_32)
