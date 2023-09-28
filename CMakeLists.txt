@@ -103,3 +103,61 @@ install(TARGETS enet
 
 install(DIRECTORY include/
         DESTINATION include)
+
+# C++ version section
+add_library(enet-cpp STATIC)
+add_library(${PROJECT_NAME}::enet-cpp ALIAS enet-cpp)
+
+target_include_directories(enet-cpp PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_sources(enet-cpp PRIVATE 
+    src/callbacks.cpp
+    src/compress.cpp
+    src/host.cpp
+    src/list.cpp
+    src/packet.cpp
+    src/peer.cpp
+    src/protocol.cpp
+    src/unix.cpp
+    src/win32.cpp
+)
+
+if(MSVC)
+    target_compile_options(enet-cpp PRIVATE -W3)
+else()
+    target_compile_options(enet-cpp PRIVATE -Wno-error)
+endif()
+
+if(HAS_FCNTL)
+    target_compile_definitions(enet-cpp PRIVATE HAS_FCNTL=1)
+endif()
+if(HAS_POLL)
+    target_compile_definitions(enet-cpp PRIVATE HAS_POLL=1)
+endif()
+if(HAS_GETNAMEINFO)
+    target_compile_definitions(enet-cpp PRIVATE HAS_GETNAMEINFO=1)
+endif()
+if(HAS_GETADDRINFO)
+    target_compile_definitions(enet-cpp PRIVATE HAS_GETADDRINFO=1)
+endif()
+if(HAS_GETHOSTBYNAME_R)
+    target_compile_definitions(enet-cpp PRIVATE HAS_GETHOSTBYNAME_R=1)
+endif()
+if(HAS_GETHOSTBYADDR_R)
+    target_compile_definitions(enet-cpp PRIVATE HAS_GETHOSTBYADDR_R=1)
+endif()
+if(HAS_INET_PTON)
+    target_compile_definitions(enet-cpp PRIVATE HAS_INET_PTON=1)
+endif()
+if(HAS_INET_NTOP)
+    target_compile_definitions(enet-cpp PRIVATE HAS_INET_NTOP=1)
+endif()
+if(HAS_MSGHDR_FLAGS)
+    target_compile_definitions(enet-cpp PRIVATE HAS_MSGHDR_FLAGS=1)
+endif()
+if(HAS_SOCKLEN_T)
+    target_compile_definitions(enet-cpp PRIVATE HAS_SOCKLEN_T=1)
+endif()
+
+if (MINGW)
+    target_link_libraries(enet-cpp winmm ws2_32)
+endif()
