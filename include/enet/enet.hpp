@@ -5,6 +5,7 @@
 #ifndef __ENET_ENET_H__
 #define __ENET_ENET_H__
 
+#include <algorithm>
 #include <stdlib.h>
 #include <vector>
 #include <memory>
@@ -154,6 +155,46 @@ typedef struct _ENetPacket
 } ENetPacket;
 
 struct ENetPacket2_impl {
+   ENetPacket2_impl(const std::vector<enet_uint8>& Data, const enet_uint32 Flags) noexcept:
+   flags(Flags),
+   data(Data){
+   };
+
+   ~ENetPacket2_impl() noexcept {
+      data.clear();
+   };
+
+   ENetPacket2_impl(const ENetPacket2_impl& rval) noexcept:
+   flags(rval.flags),
+   data(rval.data){
+   };
+
+   ENetPacket2_impl(ENetPacket2_impl&& rval) noexcept:
+   flags(rval.flags),
+   data(rval.data){
+      rval.flags = 0;
+      rval.data.clear();
+   };
+
+   ENetPacket2_impl& operator=(const ENetPacket2_impl& rval) noexcept {
+      if(this == &rval){
+         return *this;
+      }
+      flags = rval.flags;
+      data = rval.data;
+      return *this;
+   };
+
+   ENetPacket2_impl& operator=(ENetPacket2_impl&& rval) noexcept {
+      if(this == &rval){
+         return *this;
+      }
+      flags = rval.flags;
+      rval.flags = 0;
+      data = std::move(rval.data);
+      return *this;
+   };
+
    enet_uint32              flags;           /**< bitwise-or of ENetPacketFlag constants */
    std::vector<enet_uint8>  data;            /**< allocated data for packet */
 };
