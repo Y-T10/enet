@@ -7,7 +7,7 @@
 #define ENET_BUILDING_LIB 1
 #include "enet/utility.h"
 #include "enet/time.h"
-#include "enet/enet.h"
+#include "enet/enet.hpp"
 
 static const size_t commandSizes [ENET_PROTOCOL_COMMAND_COUNT] =
 {
