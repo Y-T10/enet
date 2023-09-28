@@ -2,6 +2,7 @@
  @file  packet.c
  @brief ENet packet management functions
 */
+#include <memory>
 #include <string.h>
 #define ENET_BUILDING_LIB 1
 #include "enet/enet.hpp"
@@ -153,6 +154,20 @@ enet_crc32 (const ENetBuffer * buffers, size_t bufferCount)
     }
 
     return ENET_HOST_TO_NET_32 (~ crc);
+}
+
+/** Creates a packet that may be sent to a peer.
+    @param data         initial contents of the packet's data.
+    @param flags        flags for this packet as described for the ENetPacket structure.
+    @returns the packet on success, nullptr on failure
+*/
+const ENetPacket2 enet_packet_create (const std::vector<enet_uint8>& data, const enet_uint32 flag) {
+    ENetPacket * packet = (ENetPacket *) enet_malloc (sizeof (ENetPacket));
+    if (data.empty()){
+      return nullptr;
+    }
+
+    return std::make_shared<ENetPacket2_impl>(data, flag);
 }
 
 /** @} */
