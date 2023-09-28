@@ -6,6 +6,8 @@
 #define __ENET_ENET_H__
 
 #include <stdlib.h>
+#include <vector>
+#include <memory>
 
 #ifdef _WIN32
 #include "enet/win32.h"
@@ -150,6 +152,13 @@ typedef struct _ENetPacket
    ENetPacketFreeCallback   freeCallback;    /**< function to be called when the packet is no longer in use */
    void *                   userData;        /**< application private data, may be freely modified */
 } ENetPacket;
+
+struct ENetPacket2_impl {
+   enet_uint32              flags;           /**< bitwise-or of ENetPacketFlag constants */
+   std::vector<enet_uint8>  data;            /**< allocated data for packet */
+};
+
+using ENetPacket2 = std::shared_ptr<ENetPacket2_impl>;
 
 typedef struct _ENetAcknowledgement
 {
