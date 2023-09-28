@@ -18,11 +18,6 @@ check_struct_has_member("struct msghdr" "msg_flags" "sys/types.h;sys/socket.h" H
 set(CMAKE_EXTRA_INCLUDE_FILES "sys/types.h" "sys/socket.h")
 check_type_size("socklen_t" HAS_SOCKLEN_T BUILTIN_TYPES_ONLY)
 unset(CMAKE_EXTRA_INCLUDE_FILES)
-if(MSVC)
-	add_definitions(-W3)
-else()
-	add_definitions(-Wno-error)
-endif()
 
 if(HAS_FCNTL)
     add_definitions(-DHAS_FCNTL=1)
@@ -90,6 +85,12 @@ target_sources(enet PRIVATE ${SOURCE_FILES})
 
 source_group(include FILES ${INCLUDE_FILES})
 source_group(source FILES ${SOURCE_FILES})
+
+if(MSVC)
+    target_compile_options(enet PRIVATE -W3)
+else()
+    target_compile_options(enet PRIVATE -Wno-error)
+endif()
 
 if (MINGW)
     target_link_libraries(enet winmm ws2_32)
