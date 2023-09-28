@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.12...3.20)
 
-project(enet)
+project(enet VERSION 1.3.17 LANGUAGES C CXX)
 
 # The "configure" step.
 include(CheckFunctionExists)
